@@ -2,42 +2,40 @@ import React, { useEffect, useState } from 'react';
 import {
   BarChart, Bar, XAxis, YAxis, Tooltip, Legend, CartesianGrid, ResponsiveContainer
 } from 'recharts';
+import axios from 'axios';
 
-const MonthlyChart = ({ transactions }) => {
+const MonthlyChart = () => {
   const [chartData, setChartData] = useState([]);
 
+  const months = [
+    '', 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+    'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
+  ];
+
   useEffect(() => {
-    if (!transactions || transactions.length === 0) return;
-
-    const dataMap = {};
-
-    transactions.forEach((transaction) => {
-      if (!transaction.date || isNaN(transaction.amount)) return;
-
-      const month = new Date(transaction.date).toLocaleString('default', { month: 'short' });
-
-      if (dataMap[month]) {
-        dataMap[month] += transaction.amount;
-      } else {
-        dataMap[month] = transaction.amount;
+    const fetchData = async () => {
+      try {
+        const res = await axios.get('https://expense-trackker.onrender.com/api/transactions/by-month');
+        const formatted = res.data.map(item => ({
+          month: months[item.month],
+          expense: Number(item.total.toFixed(2))
+        }));
+        setChartData(formatted);
+      } catch (err) {
+        console.error('Error fetching monthly data:', err.message);
       }
-    });
+    };
 
-    const formatted = Object.keys(dataMap).map((month) => ({
-      month,
-      expense: Number(dataMap[month].toFixed(2))
-    }));
-
-    setChartData(formatted);
-  }, [transactions]);
+    fetchData();
+  }, []);
 
   if (chartData.length === 0) {
-    return <p className="text-muted">No data to display</p>;
+    return <p className="text-muted">No monthly expense data available.</p>;
   }
 
   return (
-    <div className="mb-4">
-      <h2>Monthly Expenses</h2>
+    <div className="mb-4 card p-3 shadow-sm">
+      <h4 className="mb-3">Monthly Expenses</h4>
       <ResponsiveContainer width="100%" height={300}>
         <BarChart data={chartData}>
           <CartesianGrid strokeDasharray="3 3" />
@@ -45,7 +43,7 @@ const MonthlyChart = ({ transactions }) => {
           <YAxis />
           <Tooltip />
           <Legend />
-          <Bar dataKey="expense" fill="#8884d8" />
+          <Bar dataKey="expense" fill="#0d6efd" />
         </BarChart>
       </ResponsiveContainer>
     </div>
