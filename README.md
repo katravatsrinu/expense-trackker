@@ -1,51 +1,56 @@
-Personal Finance Visualizer – Stage 1
----------------------------------------------
-=> A simple and responsive web application to track personal transactions using MERN stack (MongoDB, Express, React, Node.js) with Vite and Bootstrap.
+Personal Finance Visualizer
+------------------------------------------
+A modern web application to track expenses, visualize spending, set category-wise budgets, and compare them with actual expenditures.
 
-=> Features (Stage 1)
-Add, view, edit, and delete transactions
+Features
+=> Add income and expense transactions
+=> View monthly total income, expenses, and balance
+=> Get category-wise breakdown in pie chart
+=> Set monthly budgets for different categories
+=> Visualize budget vs actual spending in bar chart
+=> Responsive design and interactive charts
 
-=> Transaction list with dates and amounts
+Technologies Used
+=> Frontend: React, Recharts, Bootstrap, Shadcn/ui
+=> Backend: Node.js, Express.js, MongoDB
+=> Hosting: Render.com
 
-=> Monthly expenses bar chart using Recharts
+Folder Structure
+=> client/ – React frontend
+=> server/ – Node.js backend
 
-=> Responsive design using Bootstrap 5
+Setup Instructions
+Backend
+=> Navigate to server folder
+=> Run npm install to install dependencies
+=> Create .env file with MONGO_URI and PORT
+=> Run npm start to start the backend
 
-=> Backend REST API with MongoDB database
+Frontend
+=> Navigate to client folder
+=> Run npm install to install dependencies
+=> Run npm start to launch frontend
 
-=> Basic form validation
+API Endpoints
+=> POST /api/transactions – Add a new transaction
+=> GET /api/transactions – Fetch all transactions
+=> GET /api/transactions/by-category – Get category-wise totals
+=> GET /api/budgets/:month – Get all budgets for a month
+=> POST /api/budgets/:month – Add or update budget for a month
 
-=> Tech Stack
-Frontend: React, Vite, Bootstrap 5, Axios, Recharts
+Project Stages
+Stage 1: Basic Tracking
+=> Add transactions with category, amount, type, and date
+=> Visualize monthly expenses/income
 
-=> Backend: Node.js, Express.js, MongoDB, Mongoose
+Stage 2: Categorization & Breakdown
+=> Show category-wise totals in pie chart
+=> Show summary cards for totals
 
-=> Database: MongoDB Atlas
+Stage 3: Budgeting
+=> Set monthly budgets for categories
+=> Compare budgets vs actual expenses
 
-=> Tools: Nodemon, dotenv
-
-=> Personal Finance Visualizer - Stage 2
--------------------------------------------
-=> A web application that helps users track personal expenses and visualize financial data through charts and dashboards.
-
-=> Features Covered in Stage 2
-Stage 1: Basic Transaction Tracking (Completed)
-=> Add, edit, and delete transactions with amount, date, and description
-
-=> View all transactions in a list view
-
-=> Basic form validation
-
-=> Monthly expenses bar chart (📊)
-
-=> Stage 2: Category Enhancements
-All features from Stage 1
-Predefined categories for each transaction (e.g., Food, Bills, Transport)
-
-=> Category-wise Pie Chart for visual breakdown
-=> Summary Dashboard:
-=> Total Expenses
-=> Expense Breakdown by Category
-
-=> Most Recent Transactions
-
+Deployment
+=> Backend hosted on Render: https://expense-trackker.onrender.com
+=> Frontend can be deployed via Vercel, Netlify, or your preferred provider
