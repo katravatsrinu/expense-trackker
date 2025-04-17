@@ -16,7 +16,7 @@ const TransactionForm = ({ setTransactions }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:8080/api/transactions', formData);
+      const response = await axios.post('https://expense-trackker.onrender.com/api/transactions', formData);
       setTransactions((prev) => [...prev, response.data]);
       setFormData({ amount: '', description: '', date: '' }); // Clear form
     } catch (error) {

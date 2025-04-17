@@ -10,7 +10,7 @@ const App = () => {
   useEffect(() => {
     const fetchTransactions = async () => {
       try {
-        const response = await axios.get('http://localhost:8080/api/transactions');
+        const response = await axios.get('https://expense-trackker.onrender.com/api/transactions');
         setTransactions(response.data);
       } catch (error) {
         console.error(error);

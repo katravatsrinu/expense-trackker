@@ -11,7 +11,7 @@ const TransactionList = ({ transactions, setTransactions }) => {
 
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`http://localhost:8080/api/transactions/${id}`);
+      await axios.delete(`https://expense-trackker.onrender.com/api/transactions/${id}`);
       setTransactions((prev) => prev.filter((t) => t._id !== id));
     } catch (error) {
       console.error(error);
@@ -35,7 +35,7 @@ const TransactionList = ({ transactions, setTransactions }) => {
     e.preventDefault();
     try {
       const response = await axios.put(
-        `http://localhost:8080/api/transactions/${editingTransaction._id}`,
+        `https://expense-trackker.onrender.com/api/transactions/${editingTransaction._id}`,
         {
           ...editForm,
           amount: parseFloat(editForm.amount),
