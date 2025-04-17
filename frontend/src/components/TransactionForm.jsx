@@ -1,72 +1,74 @@
+// components/TransactionForm.jsx
 import React, { useState } from 'react';
 import axios from 'axios';
 
-const TransactionForm = ({ setTransactions }) => {
+const TransactionForm = ({ fetchTransactions }) => {
   const [formData, setFormData] = useState({
-    amount: '',
     description: '',
+    amount: '',
     date: '',
+    category: 'Others',
   });
 
+  const categories = ['Food', 'Rent', 'Utilities', 'Transport', 'Entertainment', 'Others'];
+
   const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
+    setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!formData.description || !formData.amount || !formData.date) return;
+
     try {
-      const response = await axios.post('https://expense-trackker.onrender.com/api/transactions', formData);
-      setTransactions((prev) => [...prev, response.data]);
-      setFormData({ amount: '', description: '', date: '' }); // Clear form
+      await axios.post('https://expense-trackker.onrender.com/api/transactions', formData);
+      fetchTransactions();
+      setFormData({ description: '', amount: '', date: '', category: 'Others' });
     } catch (error) {
       console.error(error);
     }
   };
 
   return (
-    <div className="mb-4">
-      <h2>Add Transaction</h2>
-      <form onSubmit={handleSubmit} className="bg-light p-3 rounded">
-        <div className="mb-3">
-          <label htmlFor="amount" className="form-label">Amount</label>
-          <input
-            type="number"
-            id="amount"
-            name="amount"
-            className="form-control"
-            value={formData.amount}
-            onChange={handleChange}
-            required
-          />
-        </div>
-        <div className="mb-3">
-          <label htmlFor="description" className="form-label">Description</label>
-          <input
-            type="text"
-            id="description"
-            name="description"
-            className="form-control"
-            value={formData.description}
-            onChange={handleChange}
-            required
-          />
-        </div>
-        <div className="mb-3">
-          <label htmlFor="date" className="form-label">Date</label>
-          <input
-            type="date"
-            id="date"
-            name="date"
-            className="form-control"
-            value={formData.date}
-            onChange={handleChange}
-            required
-          />
-        </div>
-        <button type="submit" className="btn btn-primary">Add Transaction</button>
-      </form>
-    </div>
+    <form className="mb-4" onSubmit={handleSubmit}>
+      <div className="mb-2">
+        <input
+          type="text"
+          className="form-control"
+          name="description"
+          placeholder="Description"
+          value={formData.description}
+          onChange={handleChange}
+        />
+      </div>
+      <div className="mb-2">
+        <input
+          type="number"
+          className="form-control"
+          name="amount"
+          placeholder="Amount"
+          value={formData.amount}
+          onChange={handleChange}
+        />
+      </div>
+      <div className="mb-2">
+        <input
+          type="date"
+          className="form-control"
+          name="date"
+          value={formData.date}
+          onChange={handleChange}
+        />
+      </div>
+      <div className="mb-2">
+        <select className="form-select" name="category" value={formData.category} onChange={handleChange}>
+          {categories.map((cat) => (
+            <option key={cat}>{cat}</option>
+          ))}
+        </select>
+      </div>
+      <button type="submit" className="btn btn-primary">Add Transaction</button>
+    </form>
   );
 };
 
