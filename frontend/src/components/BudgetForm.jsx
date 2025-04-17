@@ -11,16 +11,21 @@ const BudgetForm = ({ fetchBudgets }) => {
 
     try {
       const month = new Date().toLocaleString('default', { month: 'short' });
-      await axios.post('https://expense-trackker.onrender.com/api/budgets', {
-        category,
-        amount: parseFloat(amount),
-        month,
-      });
+      // Use the correct endpoint with the month in the URL
+      const response = await axios.post(
+        `https://expense-trackker.onrender.com/api/budgets/${month}`, // Include month in the URL
+        {
+          category,
+          amount: parseFloat(amount),
+          month, // You can still send month in the body, but the important part is the URL
+        }
+      );
+      console.log('Budget Added:', response.data); // Log successful response
       setCategory('');
       setAmount('');
       fetchBudgets();
     } catch (error) {
-      console.error(error);
+      console.error('Error:', error.response ? error.response.data : error.message);
     }
   };
 

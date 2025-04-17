@@ -11,11 +11,13 @@ import SummaryCards from "./components/SummaryCards";
 import CategoryPieChart from "./components/CategoryPieChart";
 
 // === Stage 3 Components ===
+import BudgetForm from "./components/BudgetForm";
 import BudgetChart from "./components/BudgetChart";
 
 const App = () => {
   const [transactions, setTransactions] = useState([]);
   const [categoryData, setCategoryData] = useState([]);
+  const [budgets, setBudgets] = useState([]);
 
   // === Stage 1: Fetch all transactions ===
   const fetchTransactions = async () => {
@@ -37,10 +39,21 @@ const App = () => {
     }
   };
 
+  // === Stage 3: Fetch budgets ===
+  const fetchBudgets = async () => {
+    try {
+      const res = await axios.get("https://expense-trackker.onrender.com/api/budgets");
+      setBudgets(res.data);
+    } catch (err) {
+      console.error("Failed to fetch budgets:", err.message);
+    }
+  };
+
   // === Initial fetch on load ===
   useEffect(() => {
     fetchTransactions();
     fetchCategoryBreakdown();
+    fetchBudgets();
   }, []);
 
   // === Re-fetch category data when transactions change ===
@@ -66,7 +79,8 @@ const App = () => {
       <CategoryPieChart data={categoryData} />
 
       {/* ===== Stage 3: Budgeting ===== */}
-      <BudgetChart transactions={transactions} />
+      <BudgetForm fetchBudgets={fetchBudgets} />
+      <BudgetChart transactions={transactions} budgets={budgets} />
     </div>
   );
 };
