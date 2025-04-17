@@ -38,10 +38,13 @@ const App = () => {
     fetchTransactions();
     fetchCategoryBreakdown(); // initial fetch
   }, []);
-
+  
   useEffect(() => {
     fetchCategoryBreakdown(); // refresh on new transaction
   }, [transactions]);
+  useEffect(() => {
+    console.log("Category Data from API:", categoryData);
+  }, [categoryData]);
 
   return (
     <div className="container mt-4">
