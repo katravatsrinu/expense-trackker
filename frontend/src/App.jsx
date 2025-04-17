@@ -19,7 +19,9 @@ const App = () => {
   const [categoryData, setCategoryData] = useState([]);
   const [budgets, setBudgets] = useState([]);
 
-  // === Stage 1: Fetch all transactions ===
+  const currentMonth = new Date().toLocaleString('default', { month: 'short' });
+
+  // Stage 1
   const fetchTransactions = async () => {
     try {
       const res = await axios.get("https://expense-trackker.onrender.com/api/transactions");
@@ -29,7 +31,7 @@ const App = () => {
     }
   };
 
-  // === Stage 2: Fetch category breakdown ===
+  // Stage 2
   const fetchCategoryBreakdown = async () => {
     try {
       const res = await axios.get("https://expense-trackker.onrender.com/api/transactions/by-category");
@@ -39,24 +41,22 @@ const App = () => {
     }
   };
 
-  // === Stage 3: Fetch budgets ===
+  // ✅ Stage 3: Fetch Budgets for current month
   const fetchBudgets = async () => {
     try {
-      const res = await axios.get("https://expense-trackker.onrender.com/api/budgets");
+      const res = await axios.get(`https://expense-trackker.onrender.com/api/budgets/${currentMonth}`);
       setBudgets(res.data);
     } catch (err) {
       console.error("Failed to fetch budgets:", err.message);
     }
   };
 
-  // === Initial fetch on load ===
   useEffect(() => {
     fetchTransactions();
     fetchCategoryBreakdown();
     fetchBudgets();
   }, []);
 
-  // === Re-fetch category data when transactions change ===
   useEffect(() => {
     fetchCategoryBreakdown();
   }, [transactions]);
@@ -65,7 +65,6 @@ const App = () => {
     <div className="container mt-4">
       <h1 className="text-center mb-4">Personal Finance Visualizer</h1>
 
-      {/* ===== Stage 1: Basic Transaction Tracking ===== */}
       <TransactionForm fetchTransactions={fetchTransactions} />
       <MonthlyChart transactions={transactions} />
       <TransactionList
@@ -74,13 +73,11 @@ const App = () => {
         fetchTransactions={fetchTransactions}
       />
 
-      {/* ===== Stage 2: Categories & Dashboard ===== */}
       <SummaryCards transactions={transactions} />
       <CategoryPieChart data={categoryData} />
 
-      {/* ===== Stage 3: Budgeting ===== */}
       <BudgetForm fetchBudgets={fetchBudgets} />
-      <BudgetChart transactions={transactions} budgets={budgets} />
+      <BudgetChart budgets={budgets} transactions={transactions} />
     </div>
   );
 };

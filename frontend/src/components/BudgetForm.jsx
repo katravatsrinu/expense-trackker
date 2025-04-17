@@ -9,19 +9,18 @@ const BudgetForm = ({ fetchBudgets }) => {
     e.preventDefault();
     if (!category || !amount) return;
 
-    const month = new Date().toLocaleString('default', { month: 'short' });
-
     try {
+      const month = new Date().toLocaleString('default', { month: 'short' });
       await axios.post(`https://expense-trackker.onrender.com/api/budgets/${month}`, {
         category,
         amount: parseFloat(amount),
+        month,
       });
-
       setCategory('');
       setAmount('');
-      fetchBudgets(); // refresh chart
+      fetchBudgets();
     } catch (error) {
-      console.error('Error submitting budget:', error);
+      console.error('Error:', error.response?.data || error.message);
     }
   };
 
@@ -29,7 +28,7 @@ const BudgetForm = ({ fetchBudgets }) => {
     <form onSubmit={handleSubmit} className="mb-4">
       <h4>Set Monthly Budget</h4>
       <div className="row">
-        <div className="col-md-4 mb-2">
+        <div className="col-md-4">
           <input
             type="text"
             className="form-control"
@@ -38,7 +37,7 @@ const BudgetForm = ({ fetchBudgets }) => {
             onChange={(e) => setCategory(e.target.value)}
           />
         </div>
-        <div className="col-md-4 mb-2">
+        <div className="col-md-4">
           <input
             type="number"
             className="form-control"
@@ -47,7 +46,7 @@ const BudgetForm = ({ fetchBudgets }) => {
             onChange={(e) => setAmount(e.target.value)}
           />
         </div>
-        <div className="col-md-4 mb-2">
+        <div className="col-md-4">
           <button className="btn btn-primary w-100">Add / Update Budget</button>
         </div>
       </div>
