@@ -1,4 +1,5 @@
 Personal Finance Visualizer – Stage 1
+---------------------------------------------
 A simple and responsive web application to track personal transactions using MERN stack (MongoDB, Express, React, Node.js) with Vite and Bootstrap.
 
 Features (Stage 1)

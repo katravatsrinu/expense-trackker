@@ -36,3 +36,21 @@ exports.deleteTransaction = async (req, res) => {
         res.status(500).json({ message: error.message });
     }
 };
+
+// Stage 2: Added controller to fetch aggregated category-wise expense
+exports.getByCategory = async (req, res) => {
+    try {
+      const data = await Transaction.aggregate([
+        {
+          $group: {
+            _id: '$category',
+            total: { $sum: '$amount' },
+          },
+        },
+      ]);
+      res.json(data);
+    } catch (error) {
+      res.status(500).json({ message: error.message });
+    }
+  };
+  
